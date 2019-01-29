@@ -1,0 +1,59 @@
+{%extends "layout.html"%}
+{%block title%} Profile {%endblock%}
+
+{%block nav_items%}
+<li><a href="/hospitalProfile" style="color: white"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+<li><a href="/login" style="color: white"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+{% endblock %}
+
+{%block body%}
+    <div class="jumbotron text-center" style="width: 70%; height: 1000px;">
+        <div style="margin-top: 0 px;">
+          <h2>Recent Events </h2> <br>
+
+          <p> Healthy Pune - A Medical Campaign <br>
+          <small> Date of Event: 7-1-2019 </small> </p>
+          <img src="http://hundredcoupons.com/wp-content/uploads/2014/10/Medical-Checkup.jpg" height="300" width="450"> <br> <br>
+          <br>
+          <p> 7th International Patient Safety Conference <br>
+          <small> Date of Event : 1-12-2018 </small> </p>
+          <img src="http://www.patientsafety.co.in/demo/wp-content/uploads/2018/07/7th-international-patient-safety-conference-2017-10.jpg" height="300" width="400">
+          <form class="form-inline">
+            <div class="input-group">
+              </div>
+          </form>
+        </div>
+    </div>
+
+    <div id="hInfo" class="container" style="margin-left: 1050px; margin-top: -1000px; height: 1000px; width: 600px;">
+      <div id="hStats" class="container jumbotron" style="height: 260px; width:500px;">
+      <p style="font-size: 25px; font-weight:bold;"> Hospital Information : </p>
+      <ul style="font-size: 18px;">
+        <li> Name : Emerald Hall Clinic </li>
+        <li> Founder : Dr. K.B.Wolowitz </li>
+        <li> Founded in : 1959 </li>
+        <li> Location : Pune </li>
+        <li> Contact : +91 55555 44444 </li>
+      </ul>
+      </div>
+
+      <div id="notifications" style="height:350px; width: 500px;" class="container jumbotron">
+        <p style="font-size:25px; font-weight: bold"> Notifications : </p>
+        <ul style="font-size:18px">
+            <li> Upcoming Blood Donation Camp (5-2-2019) </li>
+            <li> Techno-Health Medical Equipment Exhibition </li>
+            <li> Bio-Hazard General Awareness Campaign </li>
+        </ul>
+      </div>
+
+      <div id="achievements" style="height: 300px; width: 500px" class="container jumbotron">
+        <p style="font-size:25px; font-weight:bold"> Achievements : </p>
+        <ul style="font-size:18px;">
+          <li> HMA Awards - Gold Awards Winner (2018) </li>
+          <li> Best Medical Tourism Award (2018) </li>
+          <li> Times All India Multispecialty Hospitals Ranking Survey 2017 </li>
+        </ul>
+      </div>
+    </div>
+
+{% endblock %}

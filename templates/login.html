@@ -1,0 +1,47 @@
+{% extends "layout.html"%}
+{%block title%}Login{% endblock %}
+
+{% block body %}
+<div id="main" class="container">
+    <header style=" padding: 20px; border-radius: 10px;" align="center" class="jumbotron"><h3> Login Page </h3></header>
+
+    <div id="home-form" align="center" style="padding-top: 20px;">
+        <div style="width:50%;" class="form-group" align="center">
+            <form id="form-content" method="post">
+                <p>
+                <h4 style="color:black" align="center">
+                    <small> LOGIN</small>
+                </h4>
+                </p>
+                <label for="username" class="float-left">
+                    <h6>
+                        <small> User Name :</small>
+                    </h6>
+                </label>
+                <input id="username" name = "username" type="text" placeholder="Eg: ABCD or xyz@lmn.com"
+                       class="form-control border border-primary">
+                <label for="pwd" class="float-left">
+                    <h6>
+                        <small> Password :</small>
+                    </h6>
+                </label>
+                <input id="pwd" name = "password" type="password" class="form-control border border-primary"> </input> <br>
+                <button class="btn-sm btn-secondary" type="button" onsubmit="login();" onclick="login();"> Log In</button>
+                <button onclick="window.location.href = 'http://127.0.0.1:8080/forgot'" class="btn-sm btn-success">
+                    Forgot Password
+                </button>
+            </form>
+            <br>
+            <form id="sign" action="http://127.0.0.1:8080/signup">
+                <p>
+                <h6>
+                    <small> Don't have an account?</small>
+                </h6>
+                <br>
+                <button class="btn-sm btn-info" type="submit"> Sign up</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock%}

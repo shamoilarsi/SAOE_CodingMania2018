@@ -1,0 +1,26 @@
+{%extends "layout.html"%}
+{%block title%}Personal{%endblock%}
+{% block nav_title %}Personal{%endblock%}
+
+{%block nav_items%}
+<li><a href="/signup" style="color: white"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+<li><a href="/login" style="color: white"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+{% endblock %}
+
+{%block body%}
+    <div class="jumbotron text-center" style="width: 70%; height: 650px;">
+        <div style="margin-top: 170px;">
+          <h1>Want Blood?</h1>
+          <p>Search Here</p>
+          <form class="form-inline" action="/search" method="post">
+            <div class="input-group">
+              <input type="text" name='search' class="form-control" size="50" placeholder="BloodGroup or Location or City" required>
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-danger">Search</button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+
+{% endblock %}

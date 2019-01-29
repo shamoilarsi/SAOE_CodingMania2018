@@ -1,0 +1,29 @@
+{% extends "layout.html"%}
+{%block title%}Forgot Password{% endblock %}
+
+{% block body %}
+  <body>
+    <div id="main" class="container">
+      <header class="jumbotron" align="center"> <h3> Forgot Password </h3> </header>
+
+      <div id="forgotPasswordForm">
+        <form id="passForm" class="form-group">
+            <p> <bold> Security Question </bold> </p>
+            <p> <small> Whatever The Question </small> </p>
+            <br>
+            <p> Answer </p>
+            <input type="text" class="form-control" id="answer">
+            <br>
+
+            <div id="subButton">
+              <button type="submit" class="form-control btn btn-primary"> Reset </button>
+            </div>
+        </form>
+      </div>
+
+      <div id="imagePop" class="container">
+        <img src="https://viralknot.com/wp-content/uploads/2013/06/Donate-Blood2.jpg" height="200" width="350" alt="image" align="right">
+      </div>
+
+    </div>
+{%endblock%}

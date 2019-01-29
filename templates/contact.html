@@ -1,0 +1,40 @@
+{% extends "layout.html"%}
+{%block title%} Contact {% endblock %}
+
+
+{% block body%}
+<div class="container-fluid bg-grey" style="height:600px">
+  <h2 class="jumbotron text-center">CONTACT</h2>
+  <br>
+  <div class="row">
+    <div class="col-sm-5">
+      <p>Contact us and we'll get back to you within 24 hours.</p>
+      <p><span class="glyphicon glyphicon-map-marker"></span> Pune, Maharashtra</p>
+      <p><span class="glyphicon glyphicon-phone"></span> +91 77776 65556</p>
+      <p><span class="glyphicon glyphicon-envelope"></span> To Know More Visit : <a href="http://www.saoeroboticsclub.in/"> Team Astros </a></p>
+    </div>
+    <div class="col-sm-7">
+
+        <form id="contact">
+          <div class="row">
+        <div class="col-sm-6 form-group">
+
+          <input class="form-control" id="name" name="name" required placeholder="Name" type="text" required>
+        </div>
+        <div class="col-sm-6 form-group">
+          <input class="form-control" id="email" name="email" required placeholder="Email" type="email" required>
+        </div>
+      </div>
+      <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <button class="btn btn-default pull-right" type="submit" onclick="alert('Message Sent')"> Send </button>
+        </div>
+      </div>
+        </form>
+
+    </div>
+  </div>
+</div>
+{%endblock%}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/static/css/styles-v1.0.css">
+    <link rel="shortcut icon" href="http://127.0.0.1:8080/static/images/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://127.0.0.1:8080/static/js/scripts.js"></script>
+    <script>{% block script %}{% endblock %}</script>
+    <title>{% block title %}{% endblock %}</title>
+
+    <body>
+      <nav class="navbar navbar-inverse navbar-default navbar-fixed-top" style="background: #ff0000ff; border-color: #ff0000ff; width:100%;">
+        <div class="container-fluid">
+          <div class="navbar-header">
+          <a href="/"><img class="img-circle navbar-left" style="padding-top: 10px; padding-right: 10px;"  src="http://127.0.0.1:8080/static/images/logo.png" height="40px" width="40px"></a>
+            <a class="navbar-brand" href="/" style="color: white">{% block nav_title %}BloodBank{% endblock %}</a>
+          </div>
+          <ul class="nav navbar-nav navbar-right">
+            {%block nav_items%}
+            <li><a href="/signup" style="color: white"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="/login" style="color: white"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            {%endblock%}
+          </ul>
+        </div>
+      </nav>
+      <div style="padding-bottom:52px;"></div>
+      {%block body%}{%endblock%}
+      <div class="my_footer">
+        <p class = "copyright">© Team Astros</p>
+        <ul class = "footer-items">
+          <li class = "footer-items-li"><a href="/About" class = "footer-items-li-a"> About Us </a></li>
+          <li class = "footer-items-li"><a href="/help" class = "footer-items-li-a"> Help </a></li>
+          <li class = "footer-items-li"><a href="/contact" class = "footer-items-li-a"> Contact Us </a></li>
+        </ul>
+      </div>
+    </body>
+  </head>
+</html>

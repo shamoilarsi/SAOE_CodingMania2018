@@ -1,0 +1,232 @@
+{% extends "layout.html"%}
+{%block title%}Sign Up{% endblock %}
+
+{% block body %}
+<div id="main">
+    <div id="heading" class="container">
+        <header class="jumbotron" align="center"><h3> Sign Up </h3></header>
+    </div>
+
+    <div id="signUpBloodGroup" class="container" style="display: inline-block;">
+        <form id="check" class="form-group">
+            <p style="padding-top: 20px;"> Sign Up For? </p>
+            <form>
+                <label class="radio-inline">
+                    <input onclick="whichOptionIsChecked()" type="radio" name="choice" id="op-bloodBank" checked>Blood
+                    Bank
+                </label>
+                <label class="radio-inline">
+                    <input onclick="whichOptionIsChecked()" type="radio" name="choice" id="op-hospital">Hospital
+                </label>
+                <label class="radio-inline">
+                    <input onclick="whichOptionIsChecked()" type="radio" name="choice" id="op-personal">Personal
+                </label>
+            </form>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div id="div-bloodBank" class="container">
+        <form id="bloodBankForm" class="form-group">
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Camp Name : </p>
+                <input type="text" id="bloodBank-campName" name="bloodBank-campName" class="form-control" required
+                       placeholder="ABCD Blood Bank">
+            </div>
+
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Camp Email </p>
+                <input name="bloodBank-campEmail" id="bloodBank-campEmail" type="email" class="form-control" required
+                       placeholder="example@xyz.com">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Password : </p>
+                <input name="bloodBank-password" type="password" id="bloodBank-password" class="form-control" required>
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Confirm Password : </p>
+                <input name="bloodBank-confirmPass" id="bloodBank-confirmPass" type="password" class="form-control"
+                       required>
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Security Question : </p>
+                <input name="bloodBank-seqQues" id="bloodBank-seqQues" type="text" id="seqQues" class="form-control"
+                       required
+                       placeholder="What is Your School Name ?">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Answer : </p>
+                <input name="bloodBank-seqAns" id="bloodBank-seqAns" type="text" class="form-control" required>
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Location : </p>
+                <input name="bloodBank-location" id="bloodBank-location" type="text" class="form-control"
+                       placeholder="Eg: Katraj">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> City : </p>
+                <input name="bloodBank-city" id="bloodBank-city" type="text" class="form-control" required
+                       placeholder="Eg: Pune">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Contact : </p>
+                <input name="bloodBank-contact" id="bloodBank-contact" type="number" class="form-control" required
+                       placeholder="+00 12345 12345">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items">Upload Document for Verification:</p>
+                <form action="http://localhost:8080/uploader" method="POST"
+                      enctype="multipart/form-data">
+                    <input type="file" name="file"/>
+                </form>
+            </div>
+            <br>
+            <div align="center">
+                <button onclick="signup('/bbsignup')" type="button" class="btn btn-success"> Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="div-hospital" class="container">
+        <form id="hospitalForm" class="form-group">
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Hospital Name </p>
+                <input type="text" id="hospital-name" name="hospital-name" class="form-control" required
+                       placeholder="Sapphire Hall Clinic">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Location </p>
+                <input type="text" name="hospital-location" id="hospital-location" class="form-control" required
+                       placeholder="Eg: Sinhgad">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> City </p>
+                <input type="text" name="hospital-city" id="hospital-city" class="form-control" required
+                       placeholder="Eg: Mumbai">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Contact </p>
+                <input type="number" name="hospital-contact" id="hospital-contact" class="form-control" required
+                       placeholder="+00 12345 12345">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Hospital E-Mail </p>
+                <input type="email" name="hospital-Email" id="hospital-Email" class="form-control" required
+                       placeholder="example@xyz.com">
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Password : </p>
+                <input type="password" name="hospital-password" id="hospital-password" class="form-control" required>
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Confirm Password : </p>
+                <input id="hospital-confirmPass" name="hospital-confirmPass" type="password" class="form-control"
+                       required>
+            </div>
+
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Hospital License Number </p>
+                <input type="number" name="hospital-licence" id="hospital-licence" class="form-control">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Security Question : </p>
+                <input id="hospital-seqQues" name="hospital-seqQues" type="text" class="form-control" required
+                       placeholder="What is Your School Name ?">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Answer : </p>
+                <input name="hospital-seqAns" id="hospital-seqAns" type="text" class="form-control" required>
+            </div>
+            <div align="center">
+                <button align="center" onclick="signup('/hpsignup')" type="button" class="btn btn-success"> Submit
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="div-personal" class="container">
+        <form id="personalForm" class="form-group">
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Name : </p>
+                <input id="person-name" name="person-name" type="text" class="form-control" required
+                       placeholder="John Snow">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> UserName : </p>
+                <input id="person-username" name="person-username" type="text" class="form-control" required
+                       placeholder="JohnSnow123">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Email </p>
+                <input id="person-Email" name="person-Email" type="email" class="form-control" required
+                       placeholder="example@xyz.com">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Password </p>
+                <input id="person-Password" name="person-Password" type="password" class="form-control" required>
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Confirm Password </p>
+                <input id="person-confirmPass" name="person-confirmPass" type="password" class="form-control" required>
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Location : </p>
+                <input id="person-location" name="person-location" type="text" class="form-control">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> City : </p>
+                <input id="person-city" name="person-city" type="text" class="form-control" required>
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Phone : </p>
+                <input id="person-phone" name="person-phone" type="text" class="form-control" required>
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Security Question : </p>
+                <input id="person-SeqQues" name="person-SeqQues" type="text" class="form-control" required
+                       placeholder="What is Your School Name ?">
+            </div>
+            <div class="div-signup-input-items">
+                <p class="p-signup-input-items"> Answer : </p>
+                <input id="person-SeqAns" name="person-SeqAns" type="text" class="form-control" required>
+            </div>
+            <div>
+                <p class="p-signup-input-items" name="bg" id="bg-options"> Bloodgroup
+                    <select style="width:30% ;margin-left:170px">
+                        <option value="Apos">A+</option>
+                        <option value="Aneg">A-</option>
+                        <option value="Bpos">B+</option>
+                        <option value="Bneg">B-</option>
+                        <option value="ABpos">AB+</option>
+                        <option value="ABneg">AB-</option>
+                        <option value="Opos">O+</option>
+                        <option value="Oneg">O-</option>
+
+                    </select>
+                </p>
+            </div>
+            <br>
+            <div class="submit-button container" align="center">
+                <button onsubmit="signup('/ursignup')" onclick="signup('/ursignup')" type="button"
+                        class="btn btn-success my-button"> Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
