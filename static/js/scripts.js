@@ -17,25 +17,30 @@ function whichOptionIsChecked() {
 }
 
 function signup(link) {
-    let pass, cpass;
+    let password, confirmPassword;
     if (!link.localeCompare('/ursignup')) {
-        pass = document.getElementById("person-Password").value;
-        cpass = document.getElementById("person-confirmPass").value;
+        password = document.getElementById("person-Password").value;
+        confirmPassword = document.getElementById("person-confirmPass").value;
     } else if (!link.localeCompare('/hpsignup')) {
-        pass = document.getElementById("hospital-password").value;
-        cpass = document.getElementById("hospital-confirmPass").value;
+        password = document.getElementById("hospital-password").value;
+        confirmPassword = document.getElementById("hospital-confirmPass").value;
     } else if (!link.localeCompare('/bbsignup')) {
-        pass = document.getElementById("bloodBank-password").value;
-        cpass = document.getElementById("bloodBank-confirmPass").value;
+        password = document.getElementById("bloodBank-password").value;
+        confirmPassword = document.getElementById("bloodBank-confirmPass").value;
     }
 
-    if (!pass.localeCompare(cpass)) {
-        var n = pass.length;
-        if (n < 8) {
-            alert("Password should be more than 8 digits");
+    if (!password.localeCompare(confirmPassword))
+    {
+        var n = password.length;
+        if (n < 8)
+        {
+            alert("Password should be more than 8 characters");
             return false;
-        } else {
-            if (!link.localeCompare('/ursignup')) {
+        }
+        else
+        {
+            if (!link.localeCompare('/ursignup'))
+            {
                 var selected = $('#bg-options').find(":selected").text();
                 $.ajax({
                     url: '/ursignup',
@@ -57,13 +62,14 @@ function signup(link) {
                             return false;
                         } else {
                             alert("Account Created");
-                            window.location = "http://127.0.0.1:8080/login";
+                           window.location = "http://127.0.0.1:8080/login";
                             return true;
                         }
                     }
                 });
             }
-            else if(!link.localeCompare('/hpsignup')){
+            else if(!link.localeCompare('/hpsignup'))
+            {
                 var selected = $('#bg-options').find(":selected").text();
 
                 $.ajax({
@@ -91,7 +97,8 @@ function signup(link) {
                     }
                 });
             }
-            else if(!link.localeCompare('/bbsignup')){
+            else if(!link.localeCompare('/bbsignup'))
+            {
                 $.ajax({
                     url: '/bbsignup',
                     type: 'post',
@@ -118,7 +125,9 @@ function signup(link) {
             }
             return false;
         }
-    } else {
+    }
+    else
+    {
         alert("Both Passwords Don't Match");
         return false;
     }
@@ -126,9 +135,9 @@ function signup(link) {
 
 
 function login() {
-    var uname = document.getElementById("username").value;
-    var pass = document.getElementById("pwd").value;
-    var n = pass.length;
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("pwd").value;
+    var n = password.length;
 
     if (n < 8) {
         alert("Password should be more than 8 digits");
@@ -138,8 +147,8 @@ function login() {
             url: '/checkLogin',
             type: 'post',
             data: {
-                uname: uname,
-                password: pass,
+                email: email,
+                password: password,
             },
             success: function (data) {
                 if (data.status) {
@@ -155,7 +164,7 @@ function login() {
                     return true;
                 }
                 else{
-                    alert("Data does not match with any entries");
+                    alert("Credentials incorrect!");
                 }
 
             }

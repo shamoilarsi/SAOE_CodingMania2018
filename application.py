@@ -1,92 +1,73 @@
 from flask import Flask, render_template, request, jsonify
 import sqlite3
 import random
-import enum
-from array import *
-import datetime
-import time
 
 
-class city(enum.Enum):
-    pune = 0
-    mumbai = 1
-    nasik = 2
-    jaipur = 3
-    delhi = 4
-    lucknow = 5
+try:
+    db = sqlite3.connect("database.db")
+    cb = db.cursor()
 
+    db.execute(
+        '''CREATE TABLE IF NOT EXISTS BloodBank(
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        password TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        location TEXT NOT NULL,
+        city TEXT NOT NULL,
+        securityQuestion TEXT NOT NULL,
+        securityAnswer TEXT NOT NULL,
+        Apositive INTEGER DEFAULT 0,
+        Anegetive INTEGER DEFAULT 0,
+        Bpositive INTEGER DEFAULT 0,
+        Bnegetive INTEGER DEFAULT 0,
+        ABpositive INTEGER DEFAULT 0,
+        ABnegetive INTEGER  DEFAULT 0,
+        Opositive INTEGER  DEFAULT 0,
+        Onegetive INTEGER  DEFAULT 0
+        ); ''')
 
-# pune,mumbai,nasik,jaipur,delhi,lucknow
-a = [[99, 1, 2, 3, 5, 5],
-     [1, 99, 1, 3, 5, 6],
-     [2, 1, 99, 4, 5, 6],
-     [3, 3, 4, 99, 1, 2],
-     [5, 5, 5, 1, 99, 2],
-     [5, 6, 6, 2, 2, 99]]
+    db.execute(
+        '''CREATE TABLE IF NOT EXISTS Hospital(
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        password TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        location TEXT NOT NULL,
+        city TEXT NOT NULL,
+        license TEXT NOT NULL,
+        securityQuestion TEXT NOT NULL,
+        securityAnswer TEXT NOT NULL,
+        Apositive INTEGER  DEFAULT 0,
+        Anegetive INTEGER DEFAULT 0,
+        Bpositive INTEGER DEFAULT 0,
+        Bnegetive INTEGER DEFAULT 0,
+        ABpositive INTEGER DEFAULT 0,
+        ABnegetive INTEGER  DEFAULT 0,
+        Opositive INTEGER  DEFAULT 0,
+        Onegetive INTEGER  DEFAULT 0
+        ); ''')
 
-# db = sqlite3.connect("database.db")
-# cb = db.cursor()
-# try:
-#
-#
-#     db.execute(
-#         '''CREATE TABLE IF NOT EXISTS BloodBank
-#         (id INTEGER PRIMARY KEY,
-#         campname TEXT NOT NULL,
-#         email TEXT NOT NULL,
-#         password TEXT NOT NULL,
-#         phone TEXT NOT NULL,
-#         location TEXT NOT NULL,
-#         city TEXT NOT NULL,
-#         sques TEXT NOT NULL,
-#         sans TEXT NOT NULL,
-#         Apos INTEGER ,
-#         Ang INTEGER ,
-#         Bpos INTEGER ,
-#         Bng INTEGER ,
-#         ABpos INTEGER ,
-#         ABng INTEGER  ,
-#         Opos INTEGER  ,
-#         Ong INTEGER  ); ''')
-#
-#     db.execute(
-#         '''CREATE TABLE IF NOT EXISTS Hospital
-#         (id INTEGER PRIMARY KEY,
-#         hospitalname TEXT NOT NULL,
-#         email TEXT NOT NULL,
-#         password TEXT NOT NULL,
-#         phone TEXT NOT NULL,
-#         location TEXT NOT NULL,
-#         city TEXT NOT NULL,
-#         sques TEXT NOT NULL,
-#         sans TEXT NOT NULL,
-#         Apos INTEGER ,
-#         Ang INTEGER ,
-#         Bpos INTEGER ,
-#         Bng INTEGER ,
-#         ABpos INTEGER ,
-#         ABng INTEGER  ,
-#         Opos INTEGER  ,
-#         Ong INTEGER  ); ''')
-#
-#     db.execute(
-#         '''CREATE TABLE IF NOT EXISTS Personal
-#         (id INTEGER PRIMARY KEY,
-#         name TEXT NOT NULL,
-#         username TEXT NOT NULL,
-#         email TEXT NOT NULL,
-#         password TEXT NOT NULL,
-#         phone TEXT NOT NULL,
-#         location TEXT NOT NULL,
-#         city TEXT NOT NULL,
-#         sques TEXT NOT NULL,
-#         sans TEXT NOT NULL,
-#         bloodgroup INTEGER ); ''')
-#     db.commit()
-#
-# except Exception as e:
-#     print("Database Already Exists : ", e)
+    db.execute(
+        '''CREATE TABLE IF NOT EXISTS Personal(
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        username TEXT NOT NULL,
+        email TEXT NOT NULL,
+        password TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        location TEXT NOT NULL,
+        city TEXT NOT NULL,
+        securityQuestion TEXT NOT NULL,
+        securityAnswer TEXT NOT NULL,
+        bloodGroup INTEGER 
+        ); ''')
+    db.commit()
 
+except Exception as e:
+    print("Exception :", e)
 
 app = Flask(__name__)
 
@@ -116,14 +97,41 @@ def decode(uname, password):
     return new
 
 
-@app.route("/", methods=['post', 'get'])
-def index():
+def insert_into_db(table, fields, data):
+    query = f'''INSERT INTO 
+    {table} ({fields})
+    values 
+    {data}'''
+
     db = sqlite3.connect("database.db")
     cb = db.cursor()
-
-    cb.execute(
-        """INSERT INTO Personal (name, username, email, password, phone, location, city, sques, sans, bloodgroup) VALUES("AAyush", "dsg", "sf", "sf", "sf", "sf", "sf", "sf", "sf", "zfjnk")""")
+    cb.execute(query)
     db.commit()
+    print("Inserted into table :", table)
+
+
+def get_credentials_from_db(table, email):
+    query = f"SELECT password FROM {table} WHERE email = '{email}'"
+    db = sqlite3.connect("database.db")
+    cb = db.cursor()
+    cb.execute(query)
+    rows = cb.fetchall()
+    if len(rows) != 0:
+        print("Password :", rows[0][0])
+        return rows[0][0]
+    else:
+        return ""
+
+
+def check_password(password, db_password):
+    if password == db_password:
+        return True
+    else:
+        return False
+
+
+@app.route("/", methods=['post', 'get'])
+def index():
     return render_template("homepage.html")
 
 
@@ -136,18 +144,20 @@ def signup():
 def login():
     return render_template("login.html")
 
+
 @app.route("/About")
 def About():
     return render_template("About.html")
+
+
 @app.route("/help")
 def help():
     return render_template("help.html")
 
+
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
-
-
 
 
 @app.route("/hospitalProfile")
@@ -172,205 +182,87 @@ def hospital():
 
 @app.route("/checkLogin", methods=['post', 'get'])
 def checkLogin():
-    db = sqlite3.connect("database.db")
-    cb = db.cursor()
+    email = str(request.form['email'])
+    password = str(request.form['password'])
 
-    num = 1
-
-    uname = request.form['uname']
-    password = request.form['password']
-    # print(uname, password)
-    cb.execute('''SELECT * FROM BloodBank WHERE campname = "''' + uname + '''"''')
-    string = cb.fetchall()
-    num = 1
-    print("0")
-    if (string == "[]"):
-        print("1")
-        cb.execute('''SELECT * FROM Hospital WHERE hospitalname = "''' + uname + '''"''')
-        string = cb.fetchall()
-        num = 2
-
-        if (string == "[]"):
-            print("2")
-            cb.execute('''SELECT * FROM Personal WHERE username = "''' + uname + '''"''')
-            string = cb.fetchall()
-            num = 3
-            if (string == "[]"):
-                num = 4
-
-    print(string)
-    print(num)
-
-    if (num != 4):
-        if (num == 1):
-            cb.execute('''SELECT password FROM BloodBank WHERE campname = "''' + uname + '''"''')
-            string = cb.fetchall()
-            if password == (string):
-                return jsonify(status=True, value=num)
-        elif (num == 2):
-            cb.execute('''SELECT password FROM Hospital WHERE hospitalname = "''' + uname + '''"''')
-            string = cb.fetchall()
-            if password == (string):
-                return jsonify(status=True, value=num)
-        elif (num == 3):
-            cb.execute('''SELECT password FROM Personal WHERE username = "''' + uname + '''"''')
-            string = cb.fetchall()
-            if password == (string):
-                return jsonify(status=True, value=num)
-    print(string)
-    return jsonify(status=False)
+    if check_password(password, get_credentials_from_db("BloodBank", email)):
+        print("BloodBank Login")
+        return jsonify(status=True, value=1)
+    elif check_password(password, get_credentials_from_db("Hospital", email)):
+        print("Hospital Login")
+        return jsonify(status=True, value=2)
+    elif check_password(password, get_credentials_from_db("Personal", email)):
+        print("Personal Login")
+        return jsonify(status=True, value=3)
+    else:
+        return jsonify(status=False)
 
 
 @app.route("/bbsignup", methods=['post', 'get'])
 def bbsignup():
-    db = sqlite3.connect("database.db")
-    cb = db.cursor()
+    name = request.form['bloodBank_campName']
+    email = request.form['bloodBank_campEmail']
+    password = request.form['bloodBank_password']
+    phno = request.form['bloodBank_contact']
+    location = request.form['bloodBank_location']
+    city = request.form['bloodBank_city']
+    security_question = request.form['bloodBank_seqQues']
+    security_answer = request.form['bloodBank_seqAns']
 
-    hn = request.form['bloodBank_campName']
-    em = request.form['bloodBank_campEmail']
-    ct = request.form['bloodBank_city']
-    l = request.form['bloodBank_location']
-    ans = request.form['bloodBank_seqAns']
-    p = request.form['bloodBank_contact']
-    passwd = request.form['bloodBank_password']
-    ques = request.form['bloodBank_seqQues']
-
-    cb.execute(
-        '''INSERT INTO BloodBank (campname, email, password, phone, location, city, sques, sans) VALUES("''' + hn + '''","''' + em + '''","''' + encode(passwd, hn) + '''","''' + p + '''","''' + l + '''","''' + ct + '''","''' + ques + '''","''' + ans + '''");''')
-    db.commit()
+    insert_into_db("BloodBank",
+                   '''name, email, password, phone, location, city, securityQuestion, securityAnswer''',
+                   (name, email, password, phno, location, city, security_question, security_answer))
 
     return jsonify(status=True)
 
 
 @app.route("/hpsignup", methods=['post', 'get'])
 def hpsignup():
-    db = sqlite3.connect("database.db")
-    cb = db.cursor()
+    name = str(request.form['hospital_name'])
+    email = str(request.form['hospital_Email'])
+    password = str(request.form['hospital_password'])
+    phno = str(request.form['hospital_contact'])
+    location = str(request.form['hospital_location'])
+    city = str(request.form['hospital_city'])
+    license_number = str(request.form['hospital_licence'])
+    security_question = str(request.form['hospital_seqQues'])
+    security_answer = str(request.form['hospital_seqAns'])
 
-    n = str(request.form['hospital_name'])
-    loc = str(request.form['hospital_location'])
-    c = str(request.form['hospital_city'])
-    con = str(request.form['hospital_contact'])
-    em = str(request.form['hospital_Email'])
-    passwd = str(request.form['hospital_password'])
-    license = str(request.form['hospital_licence'])
-    ques = str(request.form['hospital_seqQues'])
-    ans = str(request.form['hospital_seqAns'])
-
-    cb.execute(
-        '''INSERT INTO Hospital (hospitalname, email, password, phone, location, city, sques, sans) VALUES("''' + n + '''","''' + em + '''","''' + encode(n, passwd) + '''","''' + con + '''","''' + loc + '''","''' + c + '''","''' + ques + '''","''' + ans + '''");''')
-    db.commit()
+    insert_into_db("Hospital",
+                   '''name, email, password, phone, location, city, license, securityQuestion, securityAnswer''',
+                   (name, email, password, phno, location, city, license_number, security_question, security_answer))
 
     return jsonify(status=True)
 
 
 @app.route("/ursignup", methods=['post', 'get'])
 def ursignup():
-    n = str(request.form['person_name'])
-    un = str(request.form['person_username'])
-    em = str(request.form['person_Email'])
-    p = str(request.form['person_phone'])
+    name = str(request.form['person_name'])
+    username = str(request.form['person_username'])
+    email = str(request.form['person_Email'])
+    phno = str(request.form['person_phone'])
     loc = str(request.form['person_location'])
-    c = str(request.form['person_city'])
-    passwd = str(request.form['person_Password'])
-    sques = str(request.form['person_SeqQues'])
-    ans = str(request.form['person_SeqAns'])
-    bgroup = str(request.form['person_bloodgroup'])
+    city = str(request.form['person_city'])
+    password = str(request.form['person_Password'])
+    security_question = str(request.form['person_SeqQues'])
+    security_answer = str(request.form['person_SeqAns'])
+    blood_group = str(request.form['person_bloodgroup'])
 
-    db = sqlite3.connect("database.db")
-    cb = db.cursor()
-
-    cb.execute(
-        '''INSERT INTO Personal (name, username, email, password, phone, location, city, sques, sans, bloodgroup) VALUES("''' + n + '''","''' + un + '''","''' + em + '''","''' + encode(n, passwd) + '''","''' + p + '''","''' + loc + '''","''' + c + '''","''' + sques + '''","''' + ans + '''","''' + bgroup + '''");''')
-    db.commit()
+    insert_into_db("Personal",
+                   '''name, username, email, password, phone, location, city, securityQuestion, securityAnswer, bloodGroup''',
+                   (name, username, email, phno, loc, city, password, security_question, security_answer, blood_group))
 
     return jsonify(status=True)
 
 
 @app.route("/search", methods=['post', 'get'])
 def searchp():
-    print('here')
-    db = sqlite3.connect("database.db")
-    cb = db.cursor()
-    search = request.form['search']
-    print(search)
-    check = db.execute('''Select * from BloodBank where city="''' + search + '''"''')
-    n=search
-    if len(check.fetchall()) == 0:
-        if search == 'pune':
-            print("k")
-            x = a[0].index(min(a[0]))
-            print(x)
-            n = city(x).name
-            print(n)
-        elif search == 'mumbai':
-            print("k")
-            x = a[1].index(min(a[1]))
-            print(x)
-            n = city(x).name
-            print(n)
-        elif search == 'nasik':
-            print("k")
-            x = a[2].index(min(a[2]))
-            print(x)
-            n = city(x).name
-            print(n)
-        elif search == 'jaipur':
-            print("k")
-            x = a[3].index(min(a[3]))
-            print(x)
-            n = city(x).name
-            print(n)
-        elif search == 'delhi':
-            print("k")
-            x = a[4].index(min(a[4]))
-            print(x)
-            n = city(x).name
-            print(n)
-        elif search == 'lucknow':
-            print("k")
-            x = a[5].index(min(a[5]))
-            print(x)
-            n = city(x).name
-            print(n)
-        else:
-            n='mumbai'
-
-
-    print(n)
-    lis = db.execute(
-        '''Select * from BloodBank  where username="''' + search + '''"or city="''' + search + '''" or location="''' + search + '''" or city="''' + n + '''"''')
-    d = lis.fetchall()
-
-    lis1 = db.execute(
-        '''Select * from Hospital  where username="''' + search + '''"or city="''' + search + '''" or location="''' + search + '''" or city="''' + n + '''"''')
-    d1 = lis1.fetchall()
-    print(d1)
-    lis2 = db.execute(
-        '''Select * from Personal  where username="''' + search + '''"or city="''' + search + '''" or location="''' + search + '''" or city="''' + n + '''"''')
-    d2 = lis2.fetchall()
-    d=d+d1+d2
-
-    search=search.replace('+', 'pos')
-    search=search.replace('-', 'ng')
-    print(search)
-    cb = db.cursor()
-    l = cb.execute('''Select * from BloodBank where Apos>0 ''')
-    l1 = l.fetchall()
-    print(l1)
-    return render_template("search.html", data=d)
+    return render_template("search.html", data="")
 
 
 @app.route("/searchQuery", methods=['post', 'get'])
 def searchQuery():
-    db = sqlite3.connect("database.db")
-    cb = db.cursor()
-    search = request.form['search']
-    lis = db.execute(
-        '''Select * from BloodBank  where username="''' + search + '''"or city="''' + search + '''" or location="''' + search + '''"''')
-    items = lis.fetchall()
-
-    return jsonify(status=True, data=items)
+    return jsonify(status=True, data="")
 
 
 app.run(port='8080', debug=True)
