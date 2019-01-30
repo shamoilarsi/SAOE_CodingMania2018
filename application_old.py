@@ -362,7 +362,7 @@ def searchp():
     l = cb.execute('''Select * from BloodBank where Apos>0 ''')
     l1 = l.fetchall()
     print(l1)
-    return render_template("search.html", data=d)
+    return render_template("searchQuery.html", data=d)
 
 
 @app.route("/searchQuery", methods=['post', 'get'])

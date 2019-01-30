@@ -19,13 +19,13 @@ try:
         securityQuestion TEXT NOT NULL,
         securityAnswer TEXT NOT NULL,
         Apositive INTEGER DEFAULT 0,
-        Anegetive INTEGER DEFAULT 0,
+        Anegative INTEGER DEFAULT 0,
         Bpositive INTEGER DEFAULT 0,
-        Bnegetive INTEGER DEFAULT 0,
+        Bnegative INTEGER DEFAULT 0,
         ABpositive INTEGER DEFAULT 0,
-        ABnegetive INTEGER  DEFAULT 0,
+        ABnegative INTEGER  DEFAULT 0,
         Opositive INTEGER  DEFAULT 0,
-        Onegetive INTEGER  DEFAULT 0
+        Onegative INTEGER  DEFAULT 0
         ); ''')
 
     db.execute(
@@ -41,13 +41,13 @@ try:
         securityQuestion TEXT NOT NULL,
         securityAnswer TEXT NOT NULL,
         Apositive INTEGER  DEFAULT 0,
-        Anegetive INTEGER DEFAULT 0,
+        Anegative INTEGER DEFAULT 0,
         Bpositive INTEGER DEFAULT 0,
-        Bnegetive INTEGER DEFAULT 0,
+        Bnegative INTEGER DEFAULT 0,
         ABpositive INTEGER DEFAULT 0,
-        ABnegetive INTEGER  DEFAULT 0,
+        ABnegative INTEGER  DEFAULT 0,
         Opositive INTEGER  DEFAULT 0,
-        Onegetive INTEGER  DEFAULT 0
+        Onegative INTEGER  DEFAULT 0
         ); ''')
 
     db.execute(
@@ -130,6 +130,16 @@ def check_password(password, db_password):
         return False
 
 
+def search_db(table, where_clause):
+    query = f'''SELECT name, email, location, city from {table} where {where_clause}'''
+    print(query)
+    db = sqlite3.connect("database.db")
+    cb = db.cursor()
+    cb.execute(query)
+    rows = cb.fetchall()
+    return rows
+
+
 @app.route("/", methods=['post', 'get'])
 def index():
     return render_template("homepage.html")
@@ -165,7 +175,7 @@ def hospitalProfile():
     return render_template("hProfile.html")
 
 
-@app.route("/personal")
+@app.route("/personal", methods=['post', 'get'])
 def personal():
     return render_template("personal.html")
 
@@ -241,7 +251,7 @@ def ursignup():
     username = str(request.form['person_username'])
     email = str(request.form['person_Email'])
     phno = str(request.form['person_phone'])
-    loc = str(request.form['person_location'])
+    location = str(request.form['person_location'])
     city = str(request.form['person_city'])
     password = str(request.form['person_Password'])
     security_question = str(request.form['person_SeqQues'])
@@ -250,19 +260,35 @@ def ursignup():
 
     insert_into_db("Personal",
                    '''name, username, email, password, phone, location, city, securityQuestion, securityAnswer, bloodGroup''',
-                   (name, username, email, phno, loc, city, password, security_question, security_answer, blood_group))
+                   (name, username, email, phno, location, city, password, security_question, security_answer, blood_group))
 
     return jsonify(status=True)
 
 
-@app.route("/search", methods=['post', 'get'])
-def searchp():
-    return render_template("search.html", data="")
+# @app.route("/search", methods=['post', 'get'])
+# def search():
+#     return render_template("searchQuery.html", data="")
 
 
 @app.route("/searchQuery", methods=['post', 'get'])
 def searchQuery():
-    return jsonify(status=True, data="")
+    query = str(request.form['query'])
+    if '+' in query or '-' in query:
+        query = query.replace('+', 'positive')
+        query = query.replace('-', 'negative')
+
+        query = f'''{query} > 0'''
+        result = search_db("Hospital", query) + search_db("BloodBank", query)
+
+    else:
+        query = f'''city = "{query}" or location = "{query}"'''
+        blood_bank_result = search_db("BloodBank", query)
+        hospital_result = search_db("Hospital", query)
+        result = blood_bank_result + hospital_result
+
+    print(result)
+    return render_template("searchQuery.html", data=result)
+    # return jsonify(status=True, data=result)
 
 
 app.run(port='8080', debug=True)

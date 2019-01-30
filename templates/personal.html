@@ -12,15 +12,14 @@
         <div style="margin-top: 170px;">
           <h1>Want Blood?</h1>
           <p>Search Here</p>
-          <form class="form-inline" action="/search" method="post">
+          <form class="form-inline" method=POST action="/searchQuery">
             <div class="input-group">
-              <input type="text" name='search' class="form-control" size="50" placeholder="BloodGroup or Location or City" required>
+              <input type="text" name='query' class="form-control" size="50" placeholder="BloodGroup or Location or City" required>
               <div class="input-group-btn">
-                <button type="submit" class="btn btn-danger">Search</button>
+                  <button onclick="submit" class="btn btn-danger" value="Search">Search</button>
               </div>
             </div>
           </form>
         </div>
     </div>
-
 {% endblock %}

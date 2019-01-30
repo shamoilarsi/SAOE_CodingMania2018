@@ -173,20 +173,18 @@ function login() {
 }
 
 
-function search() {
+function findResults() {
     console.log("started");
-
     $.ajax({
-        url: '/searchQuery',
+        url: '/personal',
         type: 'post',
         data: {
-            query: $('input[name="search"]').val(),
+            query: $('input[name="query"]').val(),
         },
-
         success: function (data) {
             if (data.status) {
                 console.log("ajaaaaaaxxx");
-                document.getElementById("search-items").style.display = "flex";
+                document.getElementById("search-items").style.display = "block";
             }
         }
     })
